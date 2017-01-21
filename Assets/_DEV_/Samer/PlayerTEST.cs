@@ -9,6 +9,8 @@ public class PlayerTEST : MonoBehaviour
 {
     private BombPlacer bombPlacer;
 
+    private BombBase createdBomb;
+
     private void Start()
     {
         bombPlacer = GetComponent<BombPlacer>();
@@ -18,7 +20,12 @@ public class PlayerTEST : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.O))
         {
-            bombPlacer.CreateBomb(this.transform.position);
+            createdBomb = bombPlacer.CreateBomb(this.transform.position);
+        }
+
+        if (createdBomb != null)
+        {
+            createdBomb.DrawKickLine(this.transform.position);
         }
     }
 }
