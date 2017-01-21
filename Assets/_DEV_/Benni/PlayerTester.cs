@@ -16,7 +16,7 @@ public class PlayerTester : MonoBehaviour, IProjectileKillable, IForceReceivable
 
     public void ReceiveProjectileHit(ProjectileBase Projectile)
     {
-        Debug.Log("I WAS HIT BY" + Projectile.name);
+       
     }
 
     public void ReceiveForce(GameObject source, float force, float radius)
