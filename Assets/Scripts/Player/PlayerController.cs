@@ -18,11 +18,14 @@ public struct PlayerControls
     }
 }
 
+[RequireComponent(typeof(BombPlacer))]
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerControls localPlayerControls;
     private new Rigidbody rigidbody;
+    private BombPlacer bombPlacer;
+    private BombBase createdBomb;
     public float LocalPlayerSpeed { get; set; }
 
     // input setup
@@ -38,9 +41,13 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        LocalPlayerSpeed = 200f;
+        LocalPlayerSpeed = 10f;
         rigidbody = GetComponent<Rigidbody>();
 
+        //player1 = Xbox
+        ListenToInput(GamePadController1);
+
+        bombPlacer = GetComponent<BombPlacer>();
     }
 
     // Update is called once per frame
@@ -78,16 +85,22 @@ public class PlayerController : MonoBehaviour
 
     private void PlaceBomb()
     {
-        // SAMER
+        if (createdBomb == null)
+        {
+            createdBomb = bombPlacer.CreateBomb(this.transform.position + new Vector3(15f, 0, 0));
+        }
     }
 
     private void StartKickBomb()
     {
-        // SAMER
+        if (createdBomb.CanKick(transform.position))
+        {
+            createdBomb.StartKick(transform);
+        }
     }
 
     private void EndKickBomb()
     {
-        // SAMER
+        createdBomb.EndKick();
     }
 }

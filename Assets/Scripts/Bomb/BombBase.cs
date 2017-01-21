@@ -6,13 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BombBase : MonoBehaviour
 {
-    private const float EXPLOSION_COUNTDOWN = 50f, // in sec
-                        MAX_KICK_STRENGTH = 500f;
+    private const float EXPLOSION_COUNTDOWN = 8f, // in sec
+                        MAX_KICK_STRENGTH = 5000f;
 
-    private float   explosionRadius = 50f,
-                    explosionForce = 100f,
-                    kickStrength,
-                    kickStrengthPerFrame = 20f,
+    private float   explosionRadius = 100f,
+                    explosionForce = 1000f,
+                    kickStrength = 2000f,
+                    kickStrengthPerFrame = 100f,
                     kickRadius = 40f;
 
     private new Rigidbody rigidbody;
@@ -52,16 +52,23 @@ public class BombBase : MonoBehaviour
         Invoke("Explode", EXPLOSION_COUNTDOWN);
     }
 
-    public void DrawKickLine()
+    private void DrawKickLine()
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
 
         Vector3 start = transform.position;
-        Vector3 end = start+kickVelocity;
+        Vector3 end = start + kickVelocity;
         start.y = end.y = 100;
 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
+    }
+
+    private void EraseKickLine()
+    {
+        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.SetPosition(0, Vector3.zero);
+        lineRenderer.SetPosition(1, Vector3.zero);
     }
 
     public void StartKick(Transform player)
@@ -78,7 +85,7 @@ public class BombBase : MonoBehaviour
         kickDirection.Normalize();
 
         kickStrength += Time.deltaTime * kickStrengthPerFrame;
-        kickStrength = Mathf.Clamp(kickStrength, 0, MAX_KICK_STRENGTH);
+        kickStrength = Mathf.Clamp(kickStrength, 20, MAX_KICK_STRENGTH);
 
         kickVelocity = kickDirection * kickStrength;
 
@@ -87,15 +94,19 @@ public class BombBase : MonoBehaviour
 
     public void EndKick()
     {
+        rigidbody.isKinematic = false;
         rigidbody.AddForce(kickVelocity);
-        CancelKick();
+
+        EraseKickLine();
+        CancelKick();  
     }
 
     private void CancelKick()
     {
-        kickStrength = 0;
+        kickStrength = 50f;
         ShowRadius(false);
         bombChanneling = false;
+        EraseKickLine();
     }
 
     private void Explode()
@@ -107,7 +118,10 @@ public class BombBase : MonoBehaviour
             if (!hit) continue;
 
             IForceReceivable interfaceR = InterfaceUtility.GetInterface<IForceReceivable>(hit.gameObject);
-            interfaceR.ReceiveForce(this.gameObject, explosionForce, explosionRadius);
+            if (interfaceR != null)
+            {
+                interfaceR.ReceiveForce(this.gameObject, explosionForce, explosionRadius);
+            }
         }
 
         CancelKick();
