@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IForceReceivable
 {
-    void ReceiveForce(GameObject ForceSource);
+    void ReceiveForce(GameObject source, float force);
 }
