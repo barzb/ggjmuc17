@@ -9,21 +9,21 @@ public class PlayerKillerProjectile : ProjectileBase
 
     public Color NormalColor = Color.white;
     public Color DangerousColor = Color.red;
+    
 
-    // Use this for initialization
-    new void Start () {
-        base.Start();
+    protected override void OnStart()
+    {
         renderer = GetComponent<Renderer>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    protected override void OnUpdate()
+    {
+        
+    }
 
     protected override void OnDangerousSpeedChange(bool isDangerous)
     {
-        Color.Lerp(renderer.material.color, isDangerous ? DangerousColor : NormalColor, Time.deltaTime);
+        renderer.material.color = Color.Lerp(renderer.material.color, isDangerous ? DangerousColor : NormalColor, Time.deltaTime * 10f);
     }
 
     protected override void OnReceiveForce(GameObject source)
