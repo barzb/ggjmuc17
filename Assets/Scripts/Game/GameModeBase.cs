@@ -109,7 +109,7 @@ public class GameModeBase : MonoBehaviour
 
     public virtual void EndGame()
     {
-        // SHOW DEBRIEF
+        Application.Quit();
     }
 
     public void OnPlayerDies(PlayerState player)
