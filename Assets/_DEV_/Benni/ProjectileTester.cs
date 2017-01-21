@@ -35,11 +35,8 @@ public class ProjectileTester : MonoBehaviour {
         {
             if (!hit) continue;
             
-            IForceReceivable[] interfaceList = InterfaceUtility.GetInterfaces<IForceReceivable>(hit.gameObject);
-            foreach (IForceReceivable receiver in interfaceList)
-            {
-                receiver.ReceiveForce(this.gameObject, BOMB_FORCE, BOMB_RADIUS);
-            }
+            IForceReceivable interfaceR = InterfaceUtility.GetInterface<IForceReceivable>(hit.gameObject);
+            interfaceR.ReceiveForce(this.gameObject, BOMB_FORCE, BOMB_RADIUS);
         }
     }
 }
