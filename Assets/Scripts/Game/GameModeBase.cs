@@ -5,12 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class GameModeBase : MonoBehaviour
 {
+    public delegate void OnGameEndDelegate();
+    public OnGameEndDelegate OnGameEnd;
+
     private PlayerState[] connectedPlayers;
-    private bool gameWasSetup = false;
     private int currentlyConnectedPlayers;
 
-    private List<PlayerState> PlayersAlive;
-    private List<PlayerState> PlayersDead;
+    private bool gameWasSetup = false;
+    private bool gameInProgress = false;
+
+    private List<PlayerState> playersAlive;
+    private List<PlayerState> playersDead;
+    
+    private UnityEditor.SceneAsset loadedLevel;
+    public string LoadedLevelName { get { return loadedLevel.name; } }
+
+    public DebriefMenu debriefMenu;
 
     private void Awake()
     {
@@ -22,14 +32,25 @@ public class GameModeBase : MonoBehaviour
         return GameObject.FindObjectOfType<GameModeBase>();
     }
 
-    public virtual void SetupGame(int numPlayers)
+    private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Return) && playersAlive.Count > 1)
+        {
+
+            playersAlive[1].Die();
+        }
+    }
+
+    public virtual void SetupGame(int numPlayers, UnityEditor.SceneAsset loadedLevel)
+    {
+        gameInProgress = false;
         currentlyConnectedPlayers = 0;
         gameWasSetup = true;
+        this.loadedLevel = loadedLevel;
 
         connectedPlayers = new PlayerState[numPlayers];
-        PlayersAlive = new List<PlayerState>();
-        PlayersDead = new List<PlayerState>();
+        playersAlive = new List<PlayerState>();
+        playersDead = new List<PlayerState>();
     }
     
     public virtual void ConnectPlayer(PlayerController player, int playerId)
@@ -92,38 +113,45 @@ public class GameModeBase : MonoBehaviour
                 player.Spawn(Vector3.zero);
             }
         }
+        gameInProgress = true;
     }
 
     public virtual void CheckGame()
     {
-        if(PlayersAlive.Count == 1)
+        if(playersAlive.Count == 1 && gameInProgress)
         {
-            PlayersAlive[0].OnWin();
-            foreach (PlayerState loser in PlayersDead) {
+            playersAlive[0].OnWin();
+            foreach (PlayerState loser in playersDead) {
                 loser.OnLose();
             }
             EndGame();
-            return;
         }
     }
 
     public virtual void EndGame()
     {
-        Application.Quit();
+        gameInProgress = false;
+        debriefMenu.Show("Player [" + playersAlive[0].PlayerId + "] won the game");
+    }
+
+    public virtual void CloseGameSession()
+    {
+        OnGameEnd();
+        DestroyImmediate(gameObject);
     }
 
     public void OnPlayerDies(PlayerState player)
     {
-        PlayersDead.Add(player);
-        PlayersAlive.Remove(player);
+        playersDead.Add(player);
+        playersAlive.Remove(player);
 
         CheckGame();
     }
 
     public void OnPlayerSpawns(PlayerState player)
     {
-        PlayersDead.Remove(player);
-        PlayersAlive.Add(player);
+        playersDead.Remove(player);
+        playersAlive.Add(player);
 
         CheckGame();
     }

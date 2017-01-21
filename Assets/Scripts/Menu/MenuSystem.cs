@@ -37,6 +37,7 @@ public class MenuSystem : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        gameMode = GameModeBase.Get();
     }
 
     // Use this for initialization
@@ -53,7 +54,6 @@ public class MenuSystem : MonoBehaviour
         // Add menu buttons for map and player selection
         CreateMenuButtons();
 
-        gameMode = GameModeBase.Get();
     }
     // Update is called once per frame
     void Update()
@@ -114,7 +114,6 @@ public class MenuSystem : MonoBehaviour
     public void StartGame()
     {
         GoNext(1);
-        gameMode.SetupGame(2);
     }
 
     public void ExitGame()
@@ -158,11 +157,15 @@ public class MenuSystem : MonoBehaviour
             case 1:
                 startScreenCanvas.enabled = false; break;
             case 2:
-
                 levelSelectionCanvas.enabled = false; break;
             case 3:
+                GameObject eventSystem = GameObject.Find("EventSystem");
+                if (eventSystem != null) {
+                    Destroy(eventSystem);
+                }
                 SceneManager.LoadScene(persistentScene.name);
                 levelLoaded = SceneManager.LoadSceneAsync(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                gameMode.SetupGame(2, mapScenes[selectedLevelMapIndex - 1]);
                 InvokeRepeating("StartGameAfterLoad", 0.1f, 0.1f);
                 break;
         }
@@ -183,6 +186,7 @@ public class MenuSystem : MonoBehaviour
             {
                 PC = player.AddComponent<PlayerController>();
             }
+            gameMode.OnGameEnd += PC.Destroy;
             gameMode.ConnectPlayer(PC, i + 1);
         }
         gameMode.StartGame();

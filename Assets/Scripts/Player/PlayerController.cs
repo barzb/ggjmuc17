@@ -103,4 +103,9 @@ public class PlayerController : MonoBehaviour
     {
         createdBomb.EndKick();
     }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
 }
