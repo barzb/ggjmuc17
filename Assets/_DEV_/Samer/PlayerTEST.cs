@@ -20,13 +20,15 @@ public class PlayerTEST : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.O))
         {
-            createdBomb = bombPlacer.CreateBomb(this.transform.position);
-        }
-
-        if (createdBomb != null)
-        {
-            createdBomb.DrawKickLine(this.transform.position);
-        }
+            if (createdBomb == null)
+            {
+                createdBomb = bombPlacer.CreateBomb(this.transform.position + new Vector3(15f, 0, 0));
+            }
+            else if (createdBomb.CanKick(transform.position))
+            {
+                createdBomb.StartKick(transform);
+            }
+        }      
     }
 }
 

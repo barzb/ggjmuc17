@@ -26,11 +26,18 @@ public class MenuSystem : MonoBehaviour
     public List<SceneAsset> mapScenes;
 
     [Header("Player")]
-    public List<GameObject> playerTemplates; // To-Do: List<Base Player Type > 
+    public List<GameObject> playerTemplates; // To-Do: List<PlayerPrefab/PlayerPawn> 
 
     [Header("Button")]
     public GameObject buttonTemplate;
+    
+    private GameModeBase gameMode;
+    private AsyncOperation levelLoaded;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     // Use this for initialization
     void Start()
@@ -46,6 +53,7 @@ public class MenuSystem : MonoBehaviour
         // Add menu buttons for map and player selection
         CreateMenuButtons();
 
+        gameMode = GameModeBase.Get();
     }
     // Update is called once per frame
     void Update()
@@ -106,6 +114,7 @@ public class MenuSystem : MonoBehaviour
     public void StartGame()
     {
         GoNext(1);
+        gameMode.SetupGame(2);
     }
 
     public void ExitGame()
@@ -153,10 +162,30 @@ public class MenuSystem : MonoBehaviour
                 levelSelectionCanvas.enabled = false; break;
             case 3:
                 SceneManager.LoadScene(persistentScene.name);
-                SceneManager.LoadScene(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                levelLoaded = SceneManager.LoadSceneAsync(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                InvokeRepeating("StartGameAfterLoad", 0.1f, 0.1f);
                 break;
         }
     }
 
+    private void StartGameAfterLoad()
+    {
+        if (!levelLoaded.isDone)
+            return;
 
+        CancelInvoke();
+        for (int i = 0; i < 2; i++)
+        {
+            GameObject player = Instantiate<GameObject>(playerTemplates[selectedPlayerIndex - 1]);
+            DontDestroyOnLoad(player);
+            PlayerController PC = player.GetComponent<PlayerController>();
+            if (PC == null)
+            {
+                PC = player.AddComponent<PlayerController>();
+            }
+            gameMode.ConnectPlayer(PC, i + 1);
+        }
+        gameMode.StartGame();
+        Destroy(this.gameObject);
+    }
 }

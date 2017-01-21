@@ -22,4 +22,3 @@ public class BombPlacer : MonoBehaviour
         return bomb;
     }
 }
-
