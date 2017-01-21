@@ -28,7 +28,7 @@ public class ProjectileTester : MonoBehaviour {
     void StartBomb()
     {
         const float BOMB_RADIUS = 50;
-        const float BOMB_FORCE = 100;
+        const float BOMB_FORCE = 250;
 
         Collider[] Colliders = Physics.OverlapSphere(this.transform.position, BOMB_RADIUS);   
         foreach (Collider hit in Colliders)
