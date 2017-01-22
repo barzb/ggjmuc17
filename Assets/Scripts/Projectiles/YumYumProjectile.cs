@@ -5,6 +5,7 @@ using UnityEngine;
 public class YumYumProjectile : PlayerKillerProjectile
 {
     public ParticleSystem NoodleExplosionParticles;
+    public ParticleSystem NoodleTrailParticles;
 
     protected override void OnKill(IProjectileKillable target)
     {
@@ -17,6 +18,21 @@ public class YumYumProjectile : PlayerKillerProjectile
 
     protected override void OnDangerousSpeedChange(bool isDangerous)
     {
-        // spawn noodle emitter
+        if(NoodleTrailParticles == null ) {
+            return;
+        }
+        if(isDangerous && !NoodleTrailParticles.isPlaying)
+        {
+            NoodleTrailParticles.Play();
+            NoodleTrailParticles.gameObject.SetActive(true);
+            return;
+        }
+
+        if(!isDangerous && NoodleTrailParticles.isPlaying)
+        {
+            NoodleTrailParticles.Stop();
+            NoodleTrailParticles.gameObject.SetActive(false);
+            return;
+        }
     }
 }
