@@ -12,11 +12,22 @@ public class PlayerStatics
 
     public static PlayerProperties Get(int playerId)
     {
+        if (playerId == 1)
+            return Player1;
         if (playerId == 2)
             return Player2;
         if (playerId == 3)
             return Player3;
-        return Player1;
+        return Invalid;
+    }
+
+    public static PlayerProperties Invalid {
+        get {
+            PlayerProperties p = new PlayerProperties();
+            p.color = Color.grey;
+            p.controls = new PlayerControls();
+            return p;
+        }
     }
 
     public static PlayerProperties Player1 {
