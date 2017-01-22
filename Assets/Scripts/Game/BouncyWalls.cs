@@ -8,4 +8,9 @@ public class BouncyWalls : MonoBehaviour, IProjectileKillable
     {
         
     }
+
+    public bool CanBeKilled()
+    {
+        return false;
+    }
 }

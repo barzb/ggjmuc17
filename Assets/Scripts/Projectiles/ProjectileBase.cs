@@ -41,7 +41,7 @@ public abstract class ProjectileBase : MonoBehaviour, IForceReceivable
         if(projectileTarget != null)
         {
             physicsBody.AddForce(collision.relativeVelocity, ForceMode.Impulse);
-            if (IsDangerousSpeed)
+            if (IsDangerousSpeed && projectileTarget.CanBeKilled())
             {
                 projectileTarget.ReceiveProjectileHit(this);
                 OnKill(projectileTarget);
