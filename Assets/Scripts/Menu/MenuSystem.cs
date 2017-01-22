@@ -18,8 +18,8 @@ public class MenuSystem : MonoBehaviour
     [Header("For Selection")]
     public Image selectedLevelMapImage;
     public Image selectedPlayerImage;
-    private int selectedLevelMapIndex;
-    private int selectedPlayerIndex;
+    private int selectedLevelMapIndex = 1;
+    private int selectedPlayerIndex = 1;
 
     [Header("Level Maps")]
     public SceneAsset persistentScene;
@@ -50,7 +50,7 @@ public class MenuSystem : MonoBehaviour
         // Disable interaction on next buttons
         levelSelectionCanvas.transform.FindChild("NextButton").GetComponent<Button>().interactable = false;
         playerSelectionCanvas.transform.FindChild("NextButton").GetComponent<Button>().interactable = false;
-
+        
         // Add menu buttons for map and player selection
         CreateMenuButtons();
 
@@ -157,8 +157,9 @@ public class MenuSystem : MonoBehaviour
             case 1:
                 startScreenCanvas.enabled = false; break;
             case 2:
-                levelSelectionCanvas.enabled = false; break;
-            case 3:
+                levelSelectionCanvas.enabled = false;
+                //break;
+            //case 3:
                 GameObject eventSystem = GameObject.Find("EventSystem");
                 if (eventSystem != null) {
                     Destroy(eventSystem);
