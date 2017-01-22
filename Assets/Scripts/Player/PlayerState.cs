@@ -19,6 +19,8 @@ public class PlayerState : MonoBehaviour
     public void SetupPlayer(int playerId)
     {
         PlayerId = playerId;
+        Renderer r = GetComponent<Renderer>();
+        r.material.color = PlayerStatics.Get(playerId).color;
     }
 
     public void Spawn(Vector3 spawnPosition)

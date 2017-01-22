@@ -12,13 +12,13 @@ public class PlayerStatics
 
     public static PlayerProperties Get(int playerId)
     {
-        if (playerId == 1)
+        if (playerId == 3)
             return Player1;
         if (playerId == 2)
             return Player2;
-        if (playerId == 3)
+        if (playerId == 1)
             return Player3;
-        return Invalid;
+        return Player1;
     }
 
     public static PlayerProperties Invalid {
@@ -34,7 +34,7 @@ public class PlayerStatics
         get {
             PlayerProperties p = new PlayerProperties();
             p.color = Color.red;
-            p.controls = PlayerController.Keyboard;
+            p.controls = PlayerController.GamePadController1;
             return p;
         }
     }
@@ -43,7 +43,7 @@ public class PlayerStatics
         get {
             PlayerProperties p = new PlayerProperties();
             p.color = Color.blue;
-            p.controls = PlayerController.GamePadController1;
+            p.controls = PlayerController.GamePadController2;
             return p;
         }
     }
@@ -52,7 +52,7 @@ public class PlayerStatics
         get {
             PlayerProperties p = new PlayerProperties();
             p.color = Color.yellow;
-            p.controls = PlayerController.GamePadController2;
+            p.controls = PlayerController.Keyboard;
             return p;
         }
     }

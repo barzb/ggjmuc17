@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 
 public class GameModeBase : MonoBehaviour
@@ -14,10 +15,12 @@ public class GameModeBase : MonoBehaviour
     private bool gameWasSetup = false;
     private bool gameInProgress = false;
 
+    public bool IsGameInProgress { get { return gameInProgress; } }
+
     private List<PlayerState> playersAlive;
     private List<PlayerState> playersDead;
     
-    private UnityEditor.SceneAsset loadedLevel;
+    private SceneAsset loadedLevel;
     public string LoadedLevelName { get { return loadedLevel.name; } }
 
     public DebriefMenu debriefMenu;
@@ -102,7 +105,7 @@ public class GameModeBase : MonoBehaviour
                 continue;
             PlayerSpawn spawn = FindPlayerSpawn(player.PlayerId);
             if(spawn) {
-                player.Spawn(spawn.transform.position);
+                player.Spawn(spawn.transform.position + Vector3.up * 10f);
             } else {
                 player.Spawn(Vector3.zero);
             }
@@ -118,6 +121,7 @@ public class GameModeBase : MonoBehaviour
             foreach (PlayerState loser in playersDead) {
                 loser.OnLose();
             }
+            
             EndGame();
         }
     }

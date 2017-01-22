@@ -10,8 +10,8 @@ public class BombBase : MonoBehaviour
                         MAX_KICK_STRENGTH = 2500f;
 
     private float   explosionRadius = 100f,
-                    explosionForce = 1000f,
-                    kickStrength = 2000f,
+                    explosionForce = 300f,
+                    kickStrength = 3000f,
                     kickStrengthPerFrame = 100f,
                     kickRadius = 100f;
 
@@ -64,7 +64,7 @@ public class BombBase : MonoBehaviour
 
         Vector3 start = transform.position;
         Vector3 end = start + kickVelocity;
-        start.y = end.y = 100;
+        start.y = end.y = 10;
 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
@@ -154,6 +154,6 @@ public class BombBase : MonoBehaviour
 
     private void ShowRadius(bool isShown)
     {
-        Radius.SetActive(isShown);
+        Radius.SetActive(false);
     }
 }

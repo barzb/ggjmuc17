@@ -12,6 +12,7 @@ public class ProjectileTester : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        return;
 	    if(Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
