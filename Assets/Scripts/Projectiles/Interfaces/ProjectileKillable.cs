@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IProjectileKillable
 {
+    bool CanBeKilled();
+
     void ReceiveProjectileHit(ProjectileBase Projectile);
 }

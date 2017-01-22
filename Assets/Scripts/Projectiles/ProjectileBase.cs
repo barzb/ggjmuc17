@@ -37,12 +37,15 @@ public abstract class ProjectileBase : MonoBehaviour, IForceReceivable
 
     void OnCollisionEnter(Collision collision)
     {
-        if (!IsDangerousSpeed)
-            return;
-
         IProjectileKillable projectileTarget = InterfaceUtility.GetInterface<IProjectileKillable>(collision.gameObject);
-        if(projectileTarget != null) {
-            projectileTarget.ReceiveProjectileHit(this);
+        if(projectileTarget != null)
+        {
+            physicsBody.AddForce(collision.relativeVelocity, ForceMode.Impulse);
+            if (IsDangerousSpeed && projectileTarget.CanBeKilled())
+            {
+                projectileTarget.ReceiveProjectileHit(this);
+                OnKill(projectileTarget);
+            }
         }
 
     }
@@ -54,4 +57,6 @@ public abstract class ProjectileBase : MonoBehaviour, IForceReceivable
     protected abstract void OnDangerousSpeedChange(bool isDangerous);
 
     protected abstract void OnReceiveForce(GameObject source);
+
+    protected abstract void OnKill(IProjectileKillable target);
 }

@@ -18,19 +18,27 @@ public class MenuSystem : MonoBehaviour
     [Header("For Selection")]
     public Image selectedLevelMapImage;
     public Image selectedPlayerImage;
-    private int selectedLevelMapIndex;
-    private int selectedPlayerIndex;
+    private int selectedLevelMapIndex = 1;
+    private int selectedPlayerIndex = 1;
 
     [Header("Level Maps")]
     public SceneAsset persistentScene;
     public List<SceneAsset> mapScenes;
 
     [Header("Player")]
-    public List<GameObject> playerTemplates; // To-Do: List<Base Player Type > 
+    public List<GameObject> playerTemplates; // To-Do: List<PlayerPrefab/PlayerPawn> 
 
     [Header("Button")]
     public GameObject buttonTemplate;
+    
+    private GameModeBase gameMode;
+    private AsyncOperation levelLoaded;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        gameMode = GameModeBase.Get();
+    }
 
     // Use this for initialization
     void Start()
@@ -42,7 +50,7 @@ public class MenuSystem : MonoBehaviour
         // Disable interaction on next buttons
         levelSelectionCanvas.transform.FindChild("NextButton").GetComponent<Button>().interactable = false;
         playerSelectionCanvas.transform.FindChild("NextButton").GetComponent<Button>().interactable = false;
-
+        
         // Add menu buttons for map and player selection
         CreateMenuButtons();
 
@@ -149,14 +157,39 @@ public class MenuSystem : MonoBehaviour
             case 1:
                 startScreenCanvas.enabled = false; break;
             case 2:
-
-                levelSelectionCanvas.enabled = false; break;
-            case 3:
+                levelSelectionCanvas.enabled = false;
+                //break;
+            //case 3:
+                GameObject eventSystem = GameObject.Find("EventSystem");
+                if (eventSystem != null) {
+                    Destroy(eventSystem);
+                }
                 SceneManager.LoadScene(persistentScene.name);
-                SceneManager.LoadScene(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                levelLoaded = SceneManager.LoadSceneAsync(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                gameMode.SetupGame(2, mapScenes[selectedLevelMapIndex - 1]);
+                InvokeRepeating("StartGameAfterLoad", 0.1f, 0.1f);
                 break;
         }
     }
 
+    private void StartGameAfterLoad()
+    {
+        if (!levelLoaded.isDone)
+            return;
 
+        CancelInvoke();
+        for (int i = 0; i < 2; i++)
+        {
+            GameObject player = Instantiate<GameObject>(playerTemplates[selectedPlayerIndex - 1]);
+            DontDestroyOnLoad(player);
+            PlayerController PC = player.GetComponent<PlayerController>();
+            if (PC == null) {
+                PC = player.AddComponent<PlayerController>();
+            }
+            gameMode.OnGameEnd += PC.Destroy;
+            gameMode.ConnectPlayer(PC, i + 1);
+        }
+        gameMode.StartGame();
+        Destroy(this.gameObject);
+    }
 }

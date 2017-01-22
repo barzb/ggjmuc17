@@ -8,8 +8,9 @@ public class PlayerKillerProjectile : ProjectileBase
     private new Renderer renderer;
 
     public Color NormalColor = Color.white;
-    public Color DangerousColor = Color.red;
-    
+    public Color DefaultDangerousColor = Color.red;
+    private Color DangerousColor = Color.red;
+
 
     protected override void OnStart()
     {
@@ -28,6 +29,19 @@ public class PlayerKillerProjectile : ProjectileBase
 
     protected override void OnReceiveForce(GameObject source)
     {
-        
+        PlayerState playerSource = source.GetComponent<PlayerState>();
+        if(playerSource != null)
+        {
+            DangerousColor = PlayerStatics.Get(playerSource.PlayerId).color;
+        }
+        else
+        {
+            DangerousColor = DefaultDangerousColor;
+        }
+    }
+
+    protected override void OnKill(IProjectileKillable target)
+    {
+       
     }
 }

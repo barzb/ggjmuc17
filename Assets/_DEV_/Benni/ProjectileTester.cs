@@ -36,6 +36,7 @@ public class ProjectileTester : MonoBehaviour {
             if (!hit) continue;
             
             IForceReceivable interfaceR = InterfaceUtility.GetInterface<IForceReceivable>(hit.gameObject);
+            if (interfaceR == null) continue;
             interfaceR.ReceiveForce(this.gameObject, BOMB_FORCE, BOMB_RADIUS);
         }
     }
