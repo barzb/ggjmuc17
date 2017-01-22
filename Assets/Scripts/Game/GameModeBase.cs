@@ -61,13 +61,7 @@ public class GameModeBase : MonoBehaviour
             return;
         }
 
-        if(playerId == 1) {
-            player.ListenToInput(PlayerController.Keyboard);
-        } else if(playerId == 2) {
-            player.ListenToInput(PlayerController.GamePadController1);
-        } else {
-            player.ListenToInput(PlayerController.GamePadController2);
-        }
+        player.ListenToInput(PlayerStatics.Get(playerId).controls);
 
         PlayerState playerState = player.gameObject.AddComponent<PlayerState>();
         connectedPlayers[currentlyConnectedPlayers++] = playerState;

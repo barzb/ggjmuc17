@@ -182,8 +182,7 @@ public class MenuSystem : MonoBehaviour
             GameObject player = Instantiate<GameObject>(playerTemplates[selectedPlayerIndex - 1]);
             DontDestroyOnLoad(player);
             PlayerController PC = player.GetComponent<PlayerController>();
-            if (PC == null)
-            {
+            if (PC == null) {
                 PC = player.AddComponent<PlayerController>();
             }
             gameMode.OnGameEnd += PC.Destroy;
