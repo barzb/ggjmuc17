@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 using UnityEngine.SceneManagement;
 
 
@@ -22,8 +21,8 @@ public class MenuSystem : MonoBehaviour
     private int selectedPlayerIndex = 1;
 
     [Header("Level Maps")]
-    public SceneAsset persistentScene;
-    public List<SceneAsset> mapScenes;
+    public string persistentScene;
+    public List<string> mapScenes;
 
     [Header("Player")]
     public List<GameObject> playerTemplates; // To-Do: List<PlayerPrefab/PlayerPawn> 
@@ -80,7 +79,7 @@ public class MenuSystem : MonoBehaviour
         {
             GameObject newButton = Instantiate(buttonTemplate);
             newButton.transform.SetParent(mapPanel.transform);
-            newButton.name = mapScenes[i].name;
+            newButton.name = mapScenes[i];
             newButton.GetComponentInChildren<Text>().text = newButton.name;
             AddOnClickFunction(newButton.GetComponent<Button>(), MenuButtonType.SelectMap, i + 1);
         }
@@ -164,8 +163,8 @@ public class MenuSystem : MonoBehaviour
                 if (eventSystem != null) {
                     Destroy(eventSystem);
                 }
-                SceneManager.LoadScene(persistentScene.name);
-                levelLoaded = SceneManager.LoadSceneAsync(mapScenes[selectedLevelMapIndex - 1].name, LoadSceneMode.Additive);
+                SceneManager.LoadScene(persistentScene);
+                levelLoaded = SceneManager.LoadSceneAsync(mapScenes[selectedLevelMapIndex - 1], LoadSceneMode.Additive);
                 gameMode.SetupGame(2, mapScenes[selectedLevelMapIndex - 1]);
                 InvokeRepeating("StartGameAfterLoad", 0.1f, 0.1f);
                 break;

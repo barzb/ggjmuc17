@@ -16,6 +16,7 @@ public class PlayerTester : MonoBehaviour, IProjectileKillable, IForceReceivable
 
     public void ReceiveProjectileHit(ProjectileBase Projectile)
     {
+
         GetComponent<PlayerState>().Die();
     }
 

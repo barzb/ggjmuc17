@@ -29,10 +29,14 @@ public class PlayerState : MonoBehaviour
         transform.position = playerSpawnPosition;
         OnPlayerSpawn(this);
     }
+
+    
     public void Die()
     {
         OnPlayerDies(this);
+
     }
+    
 
     public void Respawn()
     {

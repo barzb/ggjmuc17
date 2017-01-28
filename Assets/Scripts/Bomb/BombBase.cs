@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BombBase : MonoBehaviour
 {
-    private const float EXPLOSION_COUNTDOWN = 8f, // in sec
+    private const float EXPLOSION_COUNTDOWN = 5f, // in sec
                         MAX_KICK_STRENGTH = 2500f;
 
     private float   explosionRadius = 100f,
