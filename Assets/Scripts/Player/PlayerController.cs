@@ -41,18 +41,16 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        LocalPlayerSpeed = 10f;
+        LocalPlayerSpeed = 22f;
         rigidbody = GetComponent<Rigidbody>();
-
-        //player1 = Xbox
-        ListenToInput(GamePadController1);
-
         bombPlacer = GetComponent<BombPlacer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!GameModeBase.Get().IsGameInProgress) return;
+
         // check if localPlayerControls is set, if not return
         if (localPlayerControls.Equals(default(PlayerControls))) return;
 
@@ -63,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
         // move player
         rigidbody.velocity = (Velocity * Time.deltaTime * LocalPlayerSpeed * 100f);
-
+        
         // call function if place bomb key is pressed
         if (Input.GetButtonDown(localPlayerControls.PlaceBombKeyName))
         {

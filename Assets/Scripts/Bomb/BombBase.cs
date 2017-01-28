@@ -6,14 +6,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BombBase : MonoBehaviour
 {
-    private const float EXPLOSION_COUNTDOWN = 8f, // in sec
-                        MAX_KICK_STRENGTH = 5000f;
+    private const float EXPLOSION_COUNTDOWN = 5f, // in sec
+                        MAX_KICK_STRENGTH = 2500f;
 
     private float   explosionRadius = 100f,
-                    explosionForce = 1000f,
-                    kickStrength = 2000f,
+                    explosionForce = 300f,
+                    kickStrength = 3000f,
                     kickStrengthPerFrame = 100f,
-                    kickRadius = 40f;
+                    kickRadius = 100f;
+
+    public GameObject Explosion;
 
     private new Rigidbody rigidbody;
 
@@ -22,6 +24,8 @@ public class BombBase : MonoBehaviour
     private Transform playerTransform;
 
     public GameObject Radius;
+
+    private GameObject explosionEmitter;
 
     private bool bombChanneling = false;
 
@@ -50,6 +54,8 @@ public class BombBase : MonoBehaviour
         ShowRadius(true);
 
         Invoke("Explode", EXPLOSION_COUNTDOWN);
+        Invoke("StartExplosionEmitter", EXPLOSION_COUNTDOWN - 1);
+        Invoke("StopExplosionEmitter", EXPLOSION_COUNTDOWN + 1);
     }
 
     private void DrawKickLine()
@@ -58,7 +64,7 @@ public class BombBase : MonoBehaviour
 
         Vector3 start = transform.position;
         Vector3 end = start + kickVelocity;
-        start.y = end.y = 100;
+        start.y = end.y = 10;
 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
@@ -124,7 +130,21 @@ public class BombBase : MonoBehaviour
             }
         }
 
+        GetComponent<MeshRenderer>().gameObject.SetActive(false);
+
         CancelKick();
+    }
+
+    private void StartExplosionEmitter()
+    {
+        explosionEmitter = Instantiate<GameObject>(Explosion, transform.position, new Quaternion());
+        explosionEmitter.SetActive(true);
+    }
+
+    private void StopExplosionEmitter()
+    {
+        Destroy(explosionEmitter);
+        Destroy(this.gameObject);
     }
 
     public bool CanKick(Vector3 playerPosition)
@@ -134,6 +154,6 @@ public class BombBase : MonoBehaviour
 
     private void ShowRadius(bool isShown)
     {
-        Radius.SetActive(isShown);
+        Radius.SetActive(false);
     }
 }

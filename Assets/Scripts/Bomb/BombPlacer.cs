@@ -12,10 +12,10 @@ public class BombPlacer : MonoBehaviour
 
     public BombBase CreateBomb(Vector3 playerPosition)
     {
-        Vector3 spawnPosition = new Vector3(playerPosition.x, playerPosition.y + 10, playerPosition.z);
+        Vector3 spawnPosition = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
 
         GameObject bombObject = Instantiate(BombPrefab, spawnPosition, new Quaternion());
-        BombBase bomb = bombObject.GetComponent<BombBase>();
+        BombBase bomb = bombObject.GetComponentInChildren<BombBase>();
 
         bomb.PlaceBomb(BombPrefab, playerPosition);
 

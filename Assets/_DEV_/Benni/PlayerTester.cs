@@ -16,10 +16,16 @@ public class PlayerTester : MonoBehaviour, IProjectileKillable, IForceReceivable
 
     public void ReceiveProjectileHit(ProjectileBase Projectile)
     {
-       
+
+        GetComponent<PlayerState>().Die();
     }
 
     public void ReceiveForce(GameObject source, float force, float radius)
     {
+    }
+
+    public bool CanBeKilled()
+    {
+        return true;
     }
 }

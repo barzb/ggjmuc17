@@ -42,6 +42,6 @@ public class PlayerKillerProjectile : ProjectileBase
 
     protected override void OnKill(IProjectileKillable target)
     {
-        // NOODLE EMITTER
+       
     }
 }

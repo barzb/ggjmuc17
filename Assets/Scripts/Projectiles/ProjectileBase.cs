@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class ProjectileBase : MonoBehaviour, IForceReceivable
 {
     // -1 if no dangerous speed is needed
-    public float dangerousSpeedMin = 2;
+    private float dangerousSpeedMin = 30;
 
     public bool IsDangerousSpeed { get { return (physicsBody.velocity.sqrMagnitude > dangerousSpeedMin * dangerousSpeedMin); } }
 
@@ -41,7 +41,7 @@ public abstract class ProjectileBase : MonoBehaviour, IForceReceivable
         if(projectileTarget != null)
         {
             physicsBody.AddForce(collision.relativeVelocity, ForceMode.Impulse);
-            if (IsDangerousSpeed)
+            if (IsDangerousSpeed && projectileTarget.CanBeKilled())
             {
                 projectileTarget.ReceiveProjectileHit(this);
                 OnKill(projectileTarget);
