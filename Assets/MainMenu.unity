@@ -147,7 +147,7 @@ Prefab:
     - target: {fileID: 114340199924801192, guid: e7602a24860898540b9242e36cd05d12,
         type: 2}
       propertyPath: mapScenes.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4482097628979298, guid: e7602a24860898540b9242e36cd05d12, type: 2}
       propertyPath: m_LocalPosition.x
@@ -184,7 +184,12 @@ Prefab:
     - target: {fileID: 114340199924801192, guid: e7602a24860898540b9242e36cd05d12,
         type: 2}
       propertyPath: mapScenes.Array.data[3]
-      value: billboardTestScene
+      value: debrief_test_scene
+      objectReference: {fileID: 0}
+    - target: {fileID: 114340199924801192, guid: e7602a24860898540b9242e36cd05d12,
+        type: 2}
+      propertyPath: mapScenes.Array.data[2]
+      value: Testing_Benni
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7602a24860898540b9242e36cd05d12, type: 2}

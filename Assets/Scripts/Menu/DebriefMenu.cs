@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DebriefMenu : MonoBehaviour
 {
     public Text resultText;
-    public UnityEditor.SceneAsset mainMenuScene;
+    public string mainMenuScene;
 
     private AsyncOperation unloadOperation;
     private AsyncOperation loadOperation;
@@ -21,7 +21,7 @@ public class DebriefMenu : MonoBehaviour
             Destroy(eventSystem);
         }
         unloadOperation = SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
-        loadOperation = SceneManager.LoadSceneAsync(mainMenuScene.name);
+        loadOperation = SceneManager.LoadSceneAsync(mainMenuScene);
         GameModeBase.Get().CloseGameSession();
         InvokeRepeating("OnLoadMainMenuComplete", 0.1f, 0.1f);
     }
