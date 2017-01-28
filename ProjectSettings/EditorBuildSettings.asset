@@ -17,3 +17,5 @@ EditorBuildSettings:
     path: Assets/_DEV_/Benni/Testing_Benni.unity
   - enabled: 1
     path: Assets/Scenes/Maps/Map2.unity
+  - enabled: 1
+    path: Assets/_DEV_/Sabrina/billboardTestScene.unity
